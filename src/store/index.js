@@ -12,6 +12,7 @@ const store = new Vuex.Store({
         email:getlocalemail() ||'',
         boardList:[],
         board:{},
+        card:{},
     },
     getters:{
         isAuth(state){
@@ -38,6 +39,9 @@ const store = new Vuex.Store({
         SET_BOARD(state,board){
             state.board=board;
         },
+        SET_CARD(state,card){
+            state.card=card;
+        }
 
 
     },
@@ -63,6 +67,7 @@ const store = new Vuex.Store({
     },
    async BOARD_FETCH({commit},id){
       try {
+          console.log('패치가왜안됮...')
          const res =await api.board.fetch(id);
         commit('SET_BOARD',res.data.item)
          return res;
@@ -87,11 +92,37 @@ const store = new Vuex.Store({
               console.log(error)
           }
     },
-    async CREATE_CARD(_,{title,listId}){
+    async FETCH_CARD({commit},{id}){
         try {
-          await api.card.create(title,listId);
+            const res =await api.card.fetch(id)
+            commit('SET_CARD',res.data.item)
         } catch (error) {
-            console.log(error)
+            console.error(error);
+        }
+    },
+     async CREATE_CARD({dispatch,state},{title,listId}){
+         try {
+            await api.card.create(title,listId);
+            dispatch('BOARD_FETCH',state.board.id)
+         } catch (error) {
+             console.error(error)
+         }
+        //  return api.card.create(title,listId)
+        //  .then(()=>{
+        //     dispatch('BOARD_FETCH',state.board.id)
+        //  })
+        //  .catch((err)=>{
+        //      console.log(err)
+        //  })
+        
+    },
+    async UPDATE_CARD({dispatch,state},{id,title,description,pos,listId}){
+        try {
+           const res= await api.card.update(id,{title,description,pos,listId});
+            dispatch('BOARD_FETCH',state.board.id)
+            return res;
+        } catch (error) {
+            console.error(error)
         }
     }
 }

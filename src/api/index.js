@@ -41,7 +41,13 @@ export const board={
 }
 
 export const card={
+    fetch(id){
+        return request(`cards/${id}`,'get')
+    },
     create(title,listId){
         return request('cards','post',{title,listId})
+    },
+    update(id,payload){
+        return request(`cards/${id}`,'put',payload)
     }
 }

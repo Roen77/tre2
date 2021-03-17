@@ -14,6 +14,8 @@
         <board-list :list="list"></board-list>
       </div>
   </div>
+  <!-- card -->
+  <router-view></router-view>
  </div>
 </template>
 

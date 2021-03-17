@@ -5,7 +5,6 @@
           <button type="submit">add Card</button>
           <div class="close-btn" @click="$emit('close')">&times;</div>
       </form>
-      <pre>{{data}}</pre>
   </div>
 </template>
 
@@ -22,7 +21,6 @@ export default {
         return {
             toggleCard: false,
             cardTitle:'',
-            data:'',
         }
     },
     computed:{
@@ -32,9 +30,11 @@ export default {
     },
     methods: {
         ...mapActions(['CREATE_CARD']),
-        submitaddCard() {
-            console.log('리스트아이디',this.listId)
+         submitaddCard() {
           this.CREATE_CARD({title:this.cardTitle,listId:this.listId})
+          .then(()=>{
+              this.cardTitle='';
+          })
         }
     },
     mounted(){

@@ -3,7 +3,12 @@
         <div class="title">{{list.title}}</div>
         <!-- card-lsit -->
         <div class="card-container">
-            <li v-for="card in list.cards" :key="card.id"></li>
+            <!-- <li v-for="card in list.cards" :key="card.id">
+                {{card}}
+            </li> -->
+            <transition-group name="ani" tag="ul">
+            <card-list v-for="card in list.cards" :key="card.id"        :card="card"></card-list>
+            </transition-group >
         </div>
         <!-- addCard -->
             <div v-if="isEditCard"><add-card @close="isEditCard=false" :listId="list.id"></add-card></div>
@@ -15,9 +20,10 @@
 
 <script>
 import addCard from './addCard.vue'
-// import CardList from './CardList.vue'
+import CardList from './CardList.vue'
+
 export default {
-  components: { addCard, },
+  components: { addCard, CardList},
     props:{
         list:{
             type:Object,
@@ -48,5 +54,14 @@ export default {
 }
 .add_btn a:hover{
     background-color: dodgerblue;
+}
+.ani-enter-active,
+.ani-leave-active{
+    transition: all 0.5s;
+}
+.ani-enter,
+.ani-leave-to{
+    transform: translateY(30px);
+    opacity: 0;
 }
 </style>

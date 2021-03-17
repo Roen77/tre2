@@ -27,7 +27,12 @@ const router =new VueRouter({
             path:'/b/:bid',
             component:()=>import('../components/Board.vue'),
             meta:{auth:true},
-            beforeEnter:beforeAuth
+            beforeEnter:beforeAuth,
+            children:[{
+                path:'c/:cid',
+                component:()=>import("../components/Card.vue")
+            }]
+
 
         },
         {
