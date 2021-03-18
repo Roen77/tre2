@@ -11,7 +11,7 @@
             <p v-if="!isvalid" class="warn">보드 제목을 입력해주세요</p>
         </div>
         <div slot="footer">
-            <button :disabled="!isvalid" class="btn"  type="submit" @click=" onSubmit">create board</button>
+            <button :disabled="!isvalid" class="create-btn"  type="submit" @click=" onSubmit">create board</button>
         </div>
     </modal>
 </template>
@@ -63,8 +63,8 @@ export default {
     box-shadow: 0 0 5px dodgerblue;
 }
 .header{position: relative;}
-.btn{padding: 7px; background-color: deeppink; color:#fff; border: none;  border-radius: 10px; cursor: pointer;}
-.btn:disabled{background-color:gray; cursor: default;}
+.create-btn{padding: 7px; background-color: deeppink; color:#fff; border: none;  border-radius: 10px; cursor: pointer;}
+.create-btn:disabled{background-color:gray; cursor: default;}
 .close-btn{position: absolute; right: 0; top: -2px; font-size: 23px; cursor: pointer;}
 .warn{position: absolute; background-color: rgb(220, 20, 60);
 border-radius:5px;

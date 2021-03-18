@@ -34,20 +34,35 @@ export const board={
     create(title){
         return request('boards','post',{title})
     },
-    update(id,title){
-        return request(`boards/${id}`,'put',{title})
+    update(id,title,bgColor){
+        return request(`boards/${id}`,'put',{title,bgColor})
+    },
+    delete(id){
+        return request(`boards/${id}`,'delete')
     }
 
+}
+
+export const list={
+    create(payload){
+        return request('lists','post',payload)
+    },
+    update(id,payload){
+        return request(`lists/${id}`,'put',payload)
+    }
 }
 
 export const card={
     fetch(id){
         return request(`cards/${id}`,'get')
     },
-    create(title,listId){
-        return request('cards','post',{title,listId})
+    create(title,listId,pos){
+        return request('cards','post',{title,listId,pos})
     },
     update(id,payload){
         return request(`cards/${id}`,'put',payload)
+    },
+    delete(id){
+        return request(`cards/${id}`,'delete')
     }
 }

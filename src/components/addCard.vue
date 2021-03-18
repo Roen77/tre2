@@ -31,10 +31,22 @@ export default {
     methods: {
         ...mapActions(['CREATE_CARD']),
          submitaddCard() {
-          this.CREATE_CARD({title:this.cardTitle,listId:this.listId})
+             const pos=this.newCardPos();
+                       this.CREATE_CARD({title:this.cardTitle,listId:this.listId,pos})
           .then(()=>{
+              console.log(pos)
               this.cardTitle='';
           })
+        },
+        newCardPos(){
+            const curList=this.$store.state.board.lists.filter(l =>l.id ===this.listId)[0]
+            //현재리스트구하기
+            if(!curList) return 65535
+            const {cards}=curList;
+            if(!cards.length) return 65535;
+            console.log('현재리스트구하기',curList)
+            return cards[cards.length-1].pos*2;
+
         }
     },
     mounted(){

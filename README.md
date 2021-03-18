@@ -136,3 +136,69 @@ export const auth={
 ## 14 두가지 방법
 1. v-if 조건문으로 input과 그냥 태그로만들어 구분해주던가
 2. input 하나가지고 readonly 속성을 이용하던가 해주기
+
+## 15. 
+```js
+      console.log('제대로가져왓는지확인',this.$el.querySelectorAll(".card-wrapper"))
+      console.log('제대로가져왓는지확인222',document.querySelectorAll(".card-wrapper"))
+      //결론두개다 유사배열로 같은 값을 가져왓다
+```
+
+## 16. 리팩토링
+```js
+import dragula from 'dragula';
+import 'dragula/dist/dragula.css';
+
+const dragger={
+    init(container){
+       return dragula([...container])
+
+    },
+    sibling({el,candidates,type}){
+        const curId=el.dataset[type+'Id']*1;
+        // const targetCard={
+        //     id:el.dataset.cardId*1,
+        //     pos:65535
+        //   }
+          let prev=null;
+          let next=null;
+    
+         candidates.forEach((el,idx,arr)=>{
+            const id=el.dataset[type+'Id']*1;
+            if(id === curId){
+              prev=idx>0?{
+                id:arr[idx-1].dataset[type+'Id']*1,
+                pos:arr[idx-1].dataset[type+'Pos']*1
+                }:null;
+    
+                next=idx<arr.length-1?{
+                   id:arr[idx+1].dataset[type+'Id']*1,
+                pos:arr[idx+1].dataset[type+'Pos']*1
+                }:null;
+                
+            }
+            // if(!prev && next){
+            //   targetCard.pos=next.pos/2;
+            // }else if(!next && prev){
+            //   targetCard.pos=prev.pos*2;
+            // }else if(prev && next){
+            //   targetCard.pos=(next.pos+prev.pos)/2;
+            // }
+        
+          })
+        return {prev, next}
+    }//sibling
+
+}
+
+export default dragger;
+```
+
+## 17. navbar 같은 경우 같은 컴포넌트를 공유하는데 특정 주소?에서만 색깔이 달라진다 그래서 state에 따로 저장되어 컨트롤
+
+## 18. watch값이든 뭐든 state가 어디서든지 변화면 watch 호출
+```js
+    watch:{
+        'bodyColor':'updateTheme'
+    },
+```

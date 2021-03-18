@@ -1,12 +1,13 @@
 <template>
-    <div class="list">
-        <div class="title">{{list.title}}</div>
+    <div class="list" :data-list-id="list.id" :data-list-pos="list.pos">
+        <div v-if="!isEditTitle" @click="onClickTitle" class="title">{{list.title}}</div>
+        <div v-else><input type="text" v-model="input" ref="inputTitle" @blur="onBlurTitle" @keyup.enter="onSubmitTitle"></div>
         <!-- card-lsit -->
         <div class="card-container">
             <!-- <li v-for="card in list.cards" :key="card.id">
                 {{card}}
             </li> -->
-            <transition-group name="ani" tag="ul">
+            <transition-group name="ani" class="card-wrapper" :data-list-id="list.id" tag="ul">
             <card-list v-for="card in list.cards" :key="card.id"        :card="card"></card-list>
             </transition-group >
         </div>
@@ -19,6 +20,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import addCard from './addCard.vue'
 import CardList from './CardList.vue'
 
@@ -27,17 +29,39 @@ export default {
     props:{
         list:{
             type:Object,
-            required:true
+            required:true,
+            input:''
         }
+    },
+    created(){
+        this.input=this.list.title
     },
     data() {
         return {
-            isEditCard: false
+            isEditCard: false,
+            isEditTitle:false,
         }
     },
     methods: {
+        ...mapActions(['UPDATE_LIST']),
         EditCARD() {
             this.isEditCard=true;
+        },
+        onClickTitle(){
+            this.isEditTitle=true;
+            this.$nextTick(()=>this.$refs.inputTitle.focus())
+        },
+        onBlurTitle(){
+            this.isEditTitle=false;
+        },
+        onSubmitTitle(){
+            this.onBlurTitle();
+            this.input=this.input.trim();
+            if(!this.input)return
+            const id=this.list.id;
+            const title=this.input;
+            if(title === this.list.title) return
+             this.UPDATE_LIST({id,title})
         }
     },
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
       <h2>보드리스트</h2>
       <div v-if="loading"><spinner></spinner></div>
       <div v-else class="board-lists">
@@ -20,7 +20,7 @@
 </template>
 <script>
 // list 꺼내기
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import AddBoard from './addBoard.vue';
 import spinner from './common/spinner.vue';
 
@@ -37,9 +37,11 @@ export default {
     },
     created(){
        this.fetchData();
+       this.SET_THEME();
     },
     methods: {
          ...mapActions(['BOARDS_FETCH']),
+         ...mapMutations(['SET_THEME']),
         fetchData() {
             this.loading=true;
             this.BOARDS_FETCH()

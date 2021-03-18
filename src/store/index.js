@@ -13,6 +13,9 @@ const store = new Vuex.Store({
         boardList:[],
         board:{},
         card:{},
+        bodyColor:'#fff',
+        navbarColor:'royalblue',
+        isshow:false
     },
     getters:{
         isAuth(state){
@@ -41,6 +44,13 @@ const store = new Vuex.Store({
         },
         SET_CARD(state,card){
             state.card=card;
+        },
+        SET_THEME(state,color){
+            state.bodyColor=color || '#fff';
+            state.navbarColor=color ?'royalblue':'#crimson';
+        },
+        SET_SETTING(state,toggle){
+            state.isshow=toggle;
         }
 
 
@@ -85,12 +95,32 @@ const store = new Vuex.Store({
             console.log(error)
         }
     },
-    async UPDATE_BOARD(_,{id,title}){
+    async UPDATE_BOARD(_,{id,title,bgColor}){
         try {
-        await api.board.update(id,title);
+            console.log('updataboard ~~~~~')
+        await api.board.update(id,title,bgColor);
           } catch (error) {
               console.log(error)
           }
+    },
+    async DELETE_BOARD(_,id){
+        try {
+            await api.board.delete(id)
+        } catch (error) {
+            console.error(error)
+        }
+    },
+    async ADD_LIST({dispatch,state},{title,boardId,pos}){
+       try {
+           await api.list.create({title,boardId,pos})
+           dispatch('BOARD_FETCH',state.board.id)
+       } catch (error) {
+           console.error(error)
+       }   
+    },
+    async UPDATE_LIST({dispatch,state},{id,pos,title}){
+         await api.list.update(id,{pos,title})
+        dispatch('BOARD_FETCH',state.board.id)
     },
     async FETCH_CARD({commit},{id}){
         try {
@@ -100,9 +130,10 @@ const store = new Vuex.Store({
             console.error(error);
         }
     },
-     async CREATE_CARD({dispatch,state},{title,listId}){
+
+     async CREATE_CARD({dispatch,state},{title,listId,pos}){
          try {
-            await api.card.create(title,listId);
+            await api.card.create(title,listId,pos);
             dispatch('BOARD_FETCH',state.board.id)
          } catch (error) {
              console.error(error)
@@ -121,6 +152,14 @@ const store = new Vuex.Store({
            const res= await api.card.update(id,{title,description,pos,listId});
             dispatch('BOARD_FETCH',state.board.id)
             return res;
+        } catch (error) {
+            console.error(error)
+        }
+    },
+    async  DELETE_CARD({dispatch,state},id){
+        try {
+            await api.card.delete(id)
+            dispatch('BOARD_FETCH',state.board.id)
         } catch (error) {
             console.error(error)
         }

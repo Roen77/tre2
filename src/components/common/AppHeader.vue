@@ -17,7 +17,7 @@
 import { mapGetters, mapMutations, mapState } from 'vuex'
 export default {
     computed:{
-        ...mapState(['email']),
+        ...mapState(['email','bodyColor','navbarColor']),
         ...mapGetters(['isAuth'])
     },
     methods: {
@@ -26,7 +26,18 @@ export default {
             this.LOGOUT();
             alert('성공적으로 로그아웃되었습니다.')
             this.$router.push('/login')
+        },
+        updateTheme(){
+             this.$el.style.backgroundColor=this.navbarColor;
+             console.log(document.body,'바디가왜출력이..')
+            document.body.style.backgroundColor=this.bodyColor;
         }
+    },
+    watch:{
+        'bodyColor':'updateTheme'
+    },
+    mounted(){
+        this.updateTheme();
     },
 
 }
